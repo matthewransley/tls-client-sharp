@@ -29,7 +29,7 @@ namespace TlsClientWrapperSharp.Handlers
         /// <summary>
         /// Gets or sets the TLS client identifier.
         /// </summary>
-        public string TlsClientIdentifier { get; set; } = "chrome_124";
+        public string TlsClientIdentifier { get; set; } = "chrome_133";
 
         /// <summary>
         /// Sends an HTTP request asynchronously using the custom TLS client.

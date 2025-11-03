@@ -5,13 +5,15 @@ namespace TlsClientWrapperSharp.Services;
 
 public partial class TlsClientWrapper
 {
+    private const string DllPath = "DLLs/tls-client-windows-64-1.11.2.dll";
+    
     /// <summary>
     ///     Imports the 'request' function from the TLS client DLL.
     /// </summary>
     /// <param name="requestPayload">The request payload as a byte array.</param>
     /// <param name="sessionId">The session ID.</param>
     /// <returns>A pointer to the response data.</returns>
-    [LibraryImport("./DLLs/tls-client-windows-64-1.7.8.dll", EntryPoint = "request")]
+    [LibraryImport(DllPath, EntryPoint = "request")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     private static partial IntPtr Request([In] byte[] requestPayload,
         [MarshalAs(UnmanagedType.LPWStr)] string sessionId);
@@ -20,7 +22,7 @@ public partial class TlsClientWrapper
     ///     Imports the 'freeMemory' function from the TLS client DLL.
     /// </summary>
     /// <param name="sessionId">The session ID.</param>
-    [LibraryImport("./DLLs/tls-client-windows-64-1.7.8.dll", EntryPoint = "freeMemory")]
+    [LibraryImport(DllPath, EntryPoint = "freeMemory")]
     [UnmanagedCallConv(CallConvs = new[] { typeof(CallConvCdecl) })]
     private static partial void FreeMemory([In] byte[] sessionId);
 

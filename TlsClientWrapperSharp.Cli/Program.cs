@@ -1,6 +1,9 @@
 ﻿using TlsClientWrapperSharp.Handlers;
 
-var tlsClientHandler = new TlsClientHandler();
+var tlsClientHandler = new TlsClientHandler
+{
+    TlsClientIdentifier = "chrome_133"
+};
 
 var httpClient = new HttpClient(tlsClientHandler);
 

@@ -20,4 +20,11 @@
       <Folder Include="Utils\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Include="DLLs\**\*">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <Link>DLLs\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      </None>
+    </ItemGroup>
+
 </Project>
