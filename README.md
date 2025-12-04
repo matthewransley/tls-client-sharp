@@ -1,78 +1,41 @@
-# TlsClientWrapperSharp
+# TLS Client Wrapper Sharp
 
-TlsClientWrapperSharp is a .NET library designed to provide a custom HttpClientHandler that leverages a TLS client DLL to send HTTP requests. This library is particularly useful for scenarios where mimicking various browsers and devices is required.
-
-## Features
-
-- Custom HttpClientHandler implementation.
-- Supports various TLS client identifiers for mimicking different browsers and devices.
-- Proxy support for HTTP requests.
-- Easy integration with existing .NET applications.
+A C# wrapper for `bogdanfinn/tls-client` that provides a custom `HttpClientHandler`. This allows you to make HTTP requests that mimic the TLS fingerprints of popular browsers, helping to bypass anti-bot protections.
 
 ## Installation
 
-To use TlsClientWrapperSharp, you need to clone the repository and add it to your project:
-```bash
-    git clone https://github.com/matthewransley/TlsClientWrapperSharp.git
-```
-
-Then, add the cloned project to your solution and reference it in your application.
+The wrapper automatically checks for and downloads the required `tls-client` library from GitHub Releases upon the first run. It stores the library in the user's temporary folder to ensure portability. You do **not** need to manually download the DLL.
 
 ## Usage
 
-Here is an example of how to use TlsClientWrapperSharp to send an HTTP GET request using the custom TLS client handler:
 ```csharp
-    using TlsClientWrapperSharp.Handlers;
+using TlsClientWrapperSharp.Handlers;
+using TlsClientWrapperSharp.Helpers;
+using TlsClientWrapperSharp.Models;
 
-    var tlsClientHandler = new TlsClientHandler
-    {
-        TlsClientIdentifier = "chrome_124" // Set the desired TLS client identifier
-    };
+// 1. Ensure the library is downloaded (checks for updates or missing file)
+await TlsLibraryLoader.EnsureLibraryExistsAsync();
 
-    var httpClient = new HttpClient(tlsClientHandler);
+// 2. Initialize the handler with a specific browser identifier
+var tlsClientHandler = new TlsClientHandler
+{
+    TlsClientIdentifier = ClientIdentifier.Chrome133
+};
 
-    var responseContent = await httpClient.GetStringAsync(@"https://tls.peet.ws/api/all");
+// 3. Create a standard HttpClient using the handler
+var httpClient = new HttpClient(tlsClientHandler);
 
-    Console.WriteLine(responseContent);
+// (Optional) Add headers as needed
+httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept-Language", "en-GB,en;q=0.9");
+
+// 4. Make requests
+var response = await httpClient.GetStringAsync("https://tls.browserleaks.com/tls");
+Console.WriteLine(response);
 ```
-## TlsClientHandler
 
-The `TlsClientHandler` class is the core of TlsClientWrapperSharp, providing a custom HttpClientHandler that uses a TLS client DLL to handle HTTP requests.
+## Features
 
-### Properties
-
-- `Proxy`: Gets or sets the proxy for the HTTP requests.
-- `SessionId`: Gets or sets the session ID for the requests.
-- `TlsClientIdentifier`: Gets or sets the TLS client identifier.
-
-### Methods
-
-- `SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)`: Sends an HTTP request asynchronously using the custom TLS client.
-
-### Available TlsClientIdentifiers
-
-The library supports various TLS client identifiers to mimic different browsers and devices. Here are the available identifiers:
-
-- Chrome: `chrome_103`, `chrome_104`, `chrome_105`, `chrome_106`, `chrome_107`, `chrome_108`, `chrome_109`, `chrome_110`, `chrome_111`, `chrome_112`, `chrome_116_PSK`, `chrome_116_PSK_PQ`, `chrome_117`, `chrome_120`, `chrome_124`
-- Safari: `safari_15_6_1`, `safari_16_0`, `safari_ipad_15_6`, `safari_ios_15_5`, `safari_ios_15_6`, `safari_ios_16_0`, `safari_ios_17_0`
-- Firefox: `firefox_102`, `firefox_104`, `firefox_105`, `firefox_106`, `firefox_108`, `firefox_110`, `firefox_117`, `firefox_120`, `firefox_123`
-- Opera: `opera_89`, `opera_90`, `opera_91`
-- Zalando: `zalando_android_mobile`, `zalando_ios_mobile`
-- Nike: `nike_ios_mobile`, `nike_android_mobile`
-- Cloudflare: `cloudscraper`
-- MMS: `mms_ios`, `mms_ios_2`, `mms_ios_3`
-- Mesh: `mesh_ios`, `mesh_ios_2`, `mesh_android`, `mesh_android_2`
-- Confirmed: `confirmed_ios`, `confirmed_android`
-- Okhttp: `okhttp4_android_7`, `okhttp4_android_8`, `okhttp4_android_9`, `okhttp4_android_10`, `okhttp4_android_11`, `okhttp4_android_12`, `okhttp4_android_13`
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a pull request or open an issue to discuss any changes.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.
-
-## Contact
-
-For questions or support, please open an issue on GitHub.
+-   **Automatic Library Management:** Automatically downloads the correct `tls-client` binary for your OS (Windows, Linux, macOS).
+-   **TLS Fingerprint Spoofing:** Mimic Chrome, Firefox, Safari, and Opera to blend in with normal traffic.
+-   **Standard HttpClient Integration:** Works seamlessly with existing C# codebases by extending `DelegatingHandler`.
+-   **Proxy Support:** Configure proxies directly on the handler.

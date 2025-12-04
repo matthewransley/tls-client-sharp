@@ -6,9 +6,9 @@
     public class TlsRequestMessage
     {
         /// <summary>
-        /// Gets or sets the TLS client identifier. Default is "FireFox110".
+        /// Gets or sets the TLS client identifier. Default is Chrome 133.
         /// </summary>
-        public string TlsClientIdentifier { get; set; } = "FireFox110";
+        public string TlsClientIdentifier { get; set; } = ClientIdentifier.Chrome133;
 
         /// <summary>
         /// Gets or sets a value indicating whether to follow redirects. Default is true.

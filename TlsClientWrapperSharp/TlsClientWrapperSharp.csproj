@@ -5,6 +5,18 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>12</LangVersion>
+        
+        <!-- NuGet Package Metadata -->
+        <PackageId>tls-client-sharp</PackageId>
+        <Version>1.0.0</Version>
+        <Authors>Matthew Ransley</Authors>
+        <Company>Matthew Ransley</Company>
+        <Description>A C# wrapper for bogdanfinn/tls-client, providing HttpClientHandler for TLS fingerprint spoofing with automatic native library management.</Description>
+        <RepositoryUrl>https://github.com/matthewransley/tls-client-sharp</RepositoryUrl>
+        <PackageTags>tls, client, httpclient, fingerprint, spoofing, csharp, native</PackageTags>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -18,13 +30,6 @@
     <ItemGroup>
       <Folder Include="Exceptions\" />
       <Folder Include="Utils\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Include="DLLs\**\*">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        <Link>DLLs\%(RecursiveDir)%(Filename)%(Extension)</Link>
-      </None>
     </ItemGroup>
 
 </Project>

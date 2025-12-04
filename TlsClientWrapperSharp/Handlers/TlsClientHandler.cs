@@ -29,7 +29,7 @@ namespace TlsClientWrapperSharp.Handlers
         /// <summary>
         /// Gets or sets the TLS client identifier.
         /// </summary>
-        public string TlsClientIdentifier { get; set; } = "chrome_133";
+        public string TlsClientIdentifier { get; set; } = ClientIdentifier.Chrome133;
 
         /// <summary>
         /// Sends an HTTP request asynchronously using the custom TLS client.
@@ -69,8 +69,14 @@ namespace TlsClientWrapperSharp.Handlers
             var responsePtr = await TlsClientWrapper.SendRequest(requestBytes, SessionId);
             var responseJson = Marshal.PtrToStringAnsi(responsePtr) ?? throw new Exception("Failed to get response");
 
-            var result = JsonSerializer.Deserialize<TlsResponseResponse>(responseJson) ?? throw new Exception("Failed to parse response");
-            await TlsClientWrapper.ReleaseMemory(Encoding.UTF8.GetBytes(result.Id));
+            var result = JsonSerializer.Deserialize<TlsResponse>(responseJson) ?? throw new Exception("Failed to parse response");
+            
+            if (result.Id != null)
+            {
+                await TlsClientWrapper.ReleaseMemory(Encoding.UTF8.GetBytes(result.Id));
+            }
+
+            if (result.Body == null) throw new Exception("Response body is null");
 
             var responseContent = Convert.FromBase64String(result.Body.Split("base64,")[1]);
             var responseStream = new MemoryStream(responseContent);
@@ -81,9 +87,12 @@ namespace TlsClientWrapperSharp.Handlers
                 StatusCode = (HttpStatusCode)result.Status,
             };
 
-            foreach (var header in result.Headers)
+            if (result.Headers != null)
             {
-                httpResponseMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.FirstOrDefault());
+                foreach (var header in result.Headers)
+                {
+                    httpResponseMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.FirstOrDefault());
+                }
             }
 
             return httpResponseMessage;

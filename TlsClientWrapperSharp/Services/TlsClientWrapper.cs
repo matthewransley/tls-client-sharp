@@ -5,7 +5,7 @@ namespace TlsClientWrapperSharp.Services;
 
 public partial class TlsClientWrapper
 {
-    private const string DllPath = "DLLs/tls-client-windows-64-1.11.2.dll";
+    private const string DllPath = "tls-client";
     
     /// <summary>
     ///     Imports the 'request' function from the TLS client DLL.
