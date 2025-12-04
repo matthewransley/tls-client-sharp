@@ -1,10 +1,32 @@
 # TLS Client Wrapper Sharp
 
+[![NuGet Version](https://img.shields.io/nuget/v/tls-client-sharp.svg?style=flat-square)](https://www.nuget.org/packages/tls-client-sharp/1.0.0)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/tls-client-sharp.svg?style=flat-square)](https://www.nuget.org/packages/tls-client-sharp/1.0.0)
+[![License](https://img.shields.io/github/license/matthewransley/tls-client-sharp.svg?style=flat-square)](https://github.com/matthewransley/tls-client-sharp/blob/main/LICENSE.txt)
+
 A C# wrapper for `bogdanfinn/tls-client` that provides a custom `HttpClientHandler`. This allows you to make HTTP requests that mimic the TLS fingerprints of popular browsers, helping to bypass anti-bot protections.
 
 ## Installation
 
 The wrapper automatically checks for and downloads the required `tls-client` library from GitHub Releases upon the first run. It stores the library in the user's temporary folder to ensure portability. You do **not** need to manually download the DLL.
+
+### Via .NET CLI
+```bash
+dotnet add package tls-client-sharp
+```
+
+### Via Package Manager Console (Visual Studio)
+```powershell
+Install-Package tls-client-sharp
+```
+
+### Via PackageReference
+Add the following to your .csproj file:
+```xml
+<ItemGroup>
+  <PackageReference Include="tls-client-sharp" Version="1.0.0" />
+</ItemGroup>
+```
 
 ## Usage
 
